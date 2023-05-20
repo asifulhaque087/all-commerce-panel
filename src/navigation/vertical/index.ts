@@ -8,11 +8,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'tabler:smart-home',
       children: [
         {
-          title: 'Add Product',
+          title: 'Add New',
           path: '/product/add'
         },
         {
-          title: 'List Products',
+          title: 'All Products',
           path: '/product'
         }
       ]
