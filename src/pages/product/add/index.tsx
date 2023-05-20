@@ -87,8 +87,8 @@ const FormLayoutsTabs = () => {
           sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}`, '& .MuiTab-root': { py: 3.5 } }}
         >
           <Tab value='product-details' label='Product Details' />
-          <Tab value='account-details' label='Account Details' />
-          <Tab value='social-links' label='Social Links' />
+          <Tab value='add-attributes' label='Add Attributes' />
+          <Tab value='add-variations' label='Add Variations' />
         </TabList>
         <form onSubmit={e => e.preventDefault()}>
           <CardContent>
@@ -147,7 +147,7 @@ const FormLayoutsTabs = () => {
               </Grid>
             </TabPanel>
 
-            <TabPanel sx={{ p: 0 }} value='account-details'>
+            <TabPanel sx={{ p: 0 }} value='add-attributes'>
               <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
                   <CustomTextField fullWidth label='Username' placeholder='carterLeonard' />
@@ -206,7 +206,7 @@ const FormLayoutsTabs = () => {
               </Grid>
             </TabPanel>
 
-            <TabPanel sx={{ p: 0 }} value='social-links'>
+            <TabPanel sx={{ p: 0 }} value='add-variations'>
               <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
                   <CustomTextField fullWidth label='Twitter' placeholder='https://twitter.com/carterLeonard' />
