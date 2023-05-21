@@ -17,11 +17,19 @@ import CardActions from '@mui/material/CardActions'
 import { SelectChangeEvent } from '@mui/material/Select'
 import InputAdornment from '@mui/material/InputAdornment'
 
+// ** Styled Component Import
+import { EditorWrapper } from 'src/@core/styles/libs/react-draft-wysiwyg'
+
+// ** Styles
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
+import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
+import { EditorState } from 'draft-js'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -42,6 +50,7 @@ const CustomInput = forwardRef((props, ref) => {
 
 const FormLayoutsTabs = () => {
   // ** States
+  const [editorValue, setEditorValue] = useState(EditorState.createEmpty())
   const [value, setValue] = useState<string>('product-details')
   const [date, setDate] = useState<DateType>(null)
   const [language, setLanguage] = useState<string[]>([])
@@ -51,7 +60,6 @@ const FormLayoutsTabs = () => {
     showPassword: false,
     showPassword2: false
   })
-
   const handleTabsChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
@@ -95,54 +103,38 @@ const FormLayoutsTabs = () => {
             <TabPanel sx={{ p: 0 }} value='product-details'>
               <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='First Name' placeholder='Leonard' />
+                  <CustomTextField fullWidth label='Product Name' placeholder='t-shirt' />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='Last Name' placeholder='Carter' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField select fullWidth label='Country' id='form-layouts-tabs-select' defaultValue=''>
+                  <CustomTextField select fullWidth label='Category' id='form-layouts-tabs-select' defaultValue=''>
                     <MenuItem value='UK'>UK</MenuItem>
                     <MenuItem value='USA'>USA</MenuItem>
                     <MenuItem value='Australia'>Australia</MenuItem>
                     <MenuItem value='Germany'>Germany</MenuItem>
                   </CustomTextField>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField
-                    select
-                    fullWidth
-                    defaultValue=''
-                    label='Language'
-                    id='form-layouts-tabs-multiple-select'
-                    SelectProps={{
-                      multiple: true,
-                      value: language,
-                      onChange: e => handleSelectChange(e as SelectChangeEvent<string[]>)
-                    }}
-                  >
-                    <MenuItem value='English'>English</MenuItem>
-                    <MenuItem value='French'>French</MenuItem>
-                    <MenuItem value='Spanish'>Spanish</MenuItem>
-                    <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                    <MenuItem value='Italian'>Italian</MenuItem>
-                    <MenuItem value='German'>German</MenuItem>
-                    <MenuItem value='Arabic'>Arabic</MenuItem>
-                  </CustomTextField>
+
+                {/* short description */}
+                <Grid item xs={12} sm={12}>
+                  <EditorWrapper>
+                    <ReactDraftWysiwyg
+                      placeholder='Short Description'
+                      editorState={editorValue}
+                      onEditorStateChange={data => setEditorValue(data)}
+                    />
+                  </EditorWrapper>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <DatePicker
-                    selected={date}
-                    showYearDropdown
-                    showMonthDropdown
-                    id='form-layouts-tabs-date'
-                    placeholderText='MM-DD-YYYY'
-                    customInput={<CustomInput />}
-                    onChange={(date: Date) => setDate(date)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth type='number' label='Phone No.' placeholder='123-456-7890' />
+
+                {/* long description */}
+
+                <Grid item xs={12} sm={12}>
+                  <EditorWrapper>
+                    <ReactDraftWysiwyg
+                      placeholder='Long Description'
+                      editorState={editorValue}
+                      onEditorStateChange={data => setEditorValue(data)}
+                    />
+                  </EditorWrapper>
                 </Grid>
               </Grid>
             </TabPanel>
