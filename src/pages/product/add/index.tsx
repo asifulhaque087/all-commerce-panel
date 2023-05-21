@@ -36,6 +36,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Types
 import { DateType } from 'src/types/forms/reactDatepickerTypes'
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material'
 
 interface State {
   password: string
@@ -60,6 +61,16 @@ const FormLayoutsTabs = () => {
     showPassword: false,
     showPassword2: false
   })
+
+  interface Attribute {
+    id: number
+    name: string
+  }
+
+  const [attributes, setAttributes] = useState<Attribute[]>([])
+
+  const [activeId, setActiveId] = useState<number | false>(false)
+
   const handleTabsChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
@@ -83,6 +94,15 @@ const FormLayoutsTabs = () => {
   // Handle Select
   const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
     setLanguage(event.target.value as string[])
+  }
+
+  const handleSelectAttributes = (event: SelectChangeEvent<string>) => {
+    const newAtt = JSON.parse(event.target.value) as Attribute
+    setAttributes([...attributes, newAtt])
+  }
+
+  const handleAttributeAccordion = (id: number) => (event: SyntheticEvent, isExpanded: boolean) => {
+    setActiveId(isExpanded ? id : false)
   }
 
   return (
@@ -142,59 +162,86 @@ const FormLayoutsTabs = () => {
             <TabPanel sx={{ p: 0 }} value='add-attributes'>
               <Grid container spacing={5}>
                 <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='Username' placeholder='carterLeonard' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth type='email' label='Email' placeholder='carterleonard@gmail.com' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
                   <CustomTextField
+                    onChange={e => handleSelectAttributes(e as SelectChangeEvent<string>)}
+                    select
                     fullWidth
-                    label='Password'
-                    value={values.password}
-                    id='form-layouts-tabs-password'
-                    onChange={handlePasswordChange('password')}
-                    type={values.showPassword ? 'text' : 'password'}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onClick={handleClickShowPassword}
-                            onMouseDown={e => e.preventDefault()}
-                            aria-label='toggle password visibility'
-                          >
-                            <Icon fontSize='1.25rem' icon={values.showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
+                    defaultValue=''
+                    label='Add Attributes'
+                    id='custom-select'
+                  >
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={JSON.stringify({ id: 1, name: 'size' })}>Ten</MenuItem>
+                    <MenuItem value={JSON.stringify({ id: 2, name: 'material' })}>Twenty</MenuItem>
+                    <MenuItem value={JSON.stringify({ id: 3, name: 'third att' })}>Thirty</MenuItem>
+                  </CustomTextField>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField
-                    fullWidth
-                    value={values.password2}
-                    label='Confirm Password'
-                    id='form-layouts-tabs-password-2'
-                    onChange={handleConfirmChange('password2')}
-                    type={values.showPassword2 ? 'text' : 'password'}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onMouseDown={e => e.preventDefault()}
-                            aria-label='toggle password visibility'
-                            onClick={handleClickShowConfirmPassword}
-                          >
-                            <Icon fontSize='1.25rem' icon={values.showPassword2 ? 'tabler:eye' : 'tabler:eye-off'} />
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Grid>
+              </Grid>
+
+              <Grid container>
+                {attributes.map((att, i) => {
+                  return (
+                    <Grid item xs={12} sm={12}>
+                      {/* <Accordion expanded={activeId == att.id} onChange={() => handleAttributeAccordion(att.id)}> */}
+                      <Accordion expanded={activeId == att.id} onChange={handleAttributeAccordion(att.id)}>
+                        <AccordionSummary
+                          expandIcon={<Icon icon='tabler:chevron-down' />}
+                          id='form-layouts-collapsible-header-1'
+                          aria-controls='form-layouts-collapsible-content-1'
+                        >
+                          <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
+                            {att.name}
+                          </Typography>
+                        </AccordionSummary>
+                        <Divider sx={{ m: '0 !important' }} />
+                        <AccordionDetails>
+                          <Grid container spacing={5}>
+                            <Grid item xs={12} sm={6}>
+                              <CustomTextField fullWidth label='Full Name' placeholder='Leonard Carter' />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <CustomTextField fullWidth type='number' label='Phone No.' placeholder='123-456-7890' />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <CustomTextField
+                                multiline
+                                rows={3}
+                                fullWidth
+                                label='Address'
+                                placeholder='1456, Liberty Street'
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <CustomTextField fullWidth type='number' label='ZIP Code' placeholder='10005' />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <CustomTextField fullWidth label='Landmark' placeholder='Nr. Wall Street' />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <CustomTextField fullWidth label='City' placeholder='New York' />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <CustomTextField
+                                select
+                                fullWidth
+                                label='Country'
+                                id='form-layouts-collapsible-select'
+                                defaultValue=''
+                              >
+                                <MenuItem value='UK'>UK</MenuItem>
+                                <MenuItem value='USA'>USA</MenuItem>
+                                <MenuItem value='Australia'>Australia</MenuItem>
+                                <MenuItem value='Germany'>Germany</MenuItem>
+                              </CustomTextField>
+                            </Grid>
+                          </Grid>
+                        </AccordionDetails>
+                      </Accordion>
+                    </Grid>
+                  )
+                })}
               </Grid>
             </TabPanel>
 
