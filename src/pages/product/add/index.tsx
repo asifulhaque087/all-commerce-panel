@@ -11,11 +11,10 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import TabContext from '@mui/lab/TabContext'
 import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import { SelectChangeEvent } from '@mui/material/Select'
-import InputAdornment from '@mui/material/InputAdornment'
+import Fab from '@mui/material/Fab'
 
 // ** Styled Component Import
 import { EditorWrapper } from 'src/@core/styles/libs/react-draft-wysiwyg'
@@ -38,17 +37,6 @@ import Icon from 'src/@core/components/icon'
 import { DateType } from 'src/types/forms/reactDatepickerTypes'
 import { Accordion, AccordionDetails, AccordionSummary, Chip, Typography } from '@mui/material'
 
-interface State {
-  password: string
-  password2: string
-  showPassword: boolean
-  showPassword2: boolean
-}
-
-const CustomInput = forwardRef((props, ref) => {
-  return <CustomTextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
-})
-
 const FormLayoutsTabs = () => {
   // ** States
 
@@ -56,13 +44,6 @@ const FormLayoutsTabs = () => {
   const [editorValue, setEditorValue] = useState(EditorState.createEmpty())
   const [value, setValue] = useState<string>('product-details')
   const [date, setDate] = useState<DateType>(null)
-  const [language, setLanguage] = useState<string[]>([])
-  const [values, setValues] = useState<State>({
-    password: '',
-    password2: '',
-    showPassword: false,
-    showPassword2: false
-  })
 
   interface Attribute {
     id: number
@@ -75,27 +56,6 @@ const FormLayoutsTabs = () => {
 
   const handleTabsChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
-  }
-
-  // Handle Password
-  const handlePasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
-
-  // Handle Confirm Password
-  const handleConfirmChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-  const handleClickShowConfirmPassword = () => {
-    setValues({ ...values, showPassword2: !values.showPassword2 })
-  }
-
-  // Handle Select
-  const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
-    setLanguage(event.target.value as string[])
   }
 
   const handleSelectAttributes = (event: SelectChangeEvent<string>) => {
@@ -230,20 +190,42 @@ const FormLayoutsTabs = () => {
                 <Grid item xs={12} sm={6}>
                   <CustomTextField fullWidth label='Twitter' placeholder='https://twitter.com/carterLeonard' />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='Facebook' placeholder='https://facebook.com/carterLeonard' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='Google+' placeholder='https://plus.google.com/carterLeonard' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='LinkedIn' placeholder='https://linkedin.com/carterLeonard' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='Instagram' placeholder='https://instagram.com/carterLeonard' />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField fullWidth label='Quora' placeholder='https://quora.com/carterLeonard' />
+
+                <Grid item xs={12} sm={12}>
+                  {/* <Accordion expanded={activeId == att.id} onChange={() => handleAttributeAccordion(att.id)}> */}
+                  <Accordion expanded={true}>
+                    <AccordionSummary
+                      expandIcon={<Icon icon='tabler:chevron-down' />}
+                      id='form-layouts-collapsible-header-1'
+                      aria-controls='form-layouts-collapsible-content-1'
+                    >
+                      {/* <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
+                        hello
+                      </Typography> */}
+
+                      <Grid container alignItems={'center'} spacing={5}>
+                        {Array.from(Array(5), (e, i) => {
+                          return (
+                            <Grid item>
+                              <Chip label='Primary' color='primary' variant='outlined' />
+                            </Grid>
+                          )
+                        })}
+
+                        <Grid item ml={'auto'} mr={2}>
+                          <Fab size='small' color='error' aria-label='edit'>
+                            <Icon icon='tabler:trash' />
+                          </Fab>
+                        </Grid>
+                      </Grid>
+                    </AccordionSummary>
+                    <Divider sx={{ m: '0 !important' }} />
+                    {/* <AccordionDetails>
+                      <Grid container spacing={5}>
+                        form will be here
+                      </Grid>
+                    </AccordionDetails> */}
+                  </Accordion>
                 </Grid>
               </Grid>
             </TabPanel>
