@@ -36,7 +36,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Types
 import { DateType } from 'src/types/forms/reactDatepickerTypes'
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Chip, Typography } from '@mui/material'
 
 interface State {
   password: string
@@ -51,6 +51,8 @@ const CustomInput = forwardRef((props, ref) => {
 
 const FormLayoutsTabs = () => {
   // ** States
+
+  const [attributeValues, setAttributeValues] = useState<number[]>([])
   const [editorValue, setEditorValue] = useState(EditorState.createEmpty())
   const [value, setValue] = useState<string>('product-details')
   const [date, setDate] = useState<DateType>(null)
@@ -103,6 +105,10 @@ const FormLayoutsTabs = () => {
 
   const handleAttributeAccordion = (id: number) => (event: SyntheticEvent, isExpanded: boolean) => {
     setActiveId(isExpanded ? id : false)
+  }
+
+  const handleAttributeValues = (id: number) => {
+    setAttributeValues([...attributeValues, id])
   }
 
   return (
@@ -198,44 +204,18 @@ const FormLayoutsTabs = () => {
                         <Divider sx={{ m: '0 !important' }} />
                         <AccordionDetails>
                           <Grid container spacing={5}>
-                            <Grid item xs={12} sm={6}>
-                              <CustomTextField fullWidth label='Full Name' placeholder='Leonard Carter' />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                              <CustomTextField fullWidth type='number' label='Phone No.' placeholder='123-456-7890' />
-                            </Grid>
-                            <Grid item xs={12}>
-                              <CustomTextField
-                                multiline
-                                rows={3}
-                                fullWidth
-                                label='Address'
-                                placeholder='1456, Liberty Street'
-                              />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                              <CustomTextField fullWidth type='number' label='ZIP Code' placeholder='10005' />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                              <CustomTextField fullWidth label='Landmark' placeholder='Nr. Wall Street' />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                              <CustomTextField fullWidth label='City' placeholder='New York' />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                              <CustomTextField
-                                select
-                                fullWidth
-                                label='Country'
-                                id='form-layouts-collapsible-select'
-                                defaultValue=''
-                              >
-                                <MenuItem value='UK'>UK</MenuItem>
-                                <MenuItem value='USA'>USA</MenuItem>
-                                <MenuItem value='Australia'>Australia</MenuItem>
-                                <MenuItem value='Germany'>Germany</MenuItem>
-                              </CustomTextField>
-                            </Grid>
+                            {Array.from(Array(23), (e, i) => {
+                              return (
+                                <Grid item>
+                                  <Chip
+                                    label='Primary'
+                                    color='primary'
+                                    variant={`${attributeValues.includes(i) ? 'filled' : 'outlined'}`}
+                                    onClick={() => handleAttributeValues(i)}
+                                  />
+                                </Grid>
+                              )
+                            })}
                           </Grid>
                         </AccordionDetails>
                       </Accordion>
